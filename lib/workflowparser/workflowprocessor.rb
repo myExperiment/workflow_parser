@@ -60,6 +60,28 @@ module WorkflowParser
       }.first
     end
 
+    # Find the first WorkflowProcessor subclass
+    # that recognize the given file IO, or nil
+    # if the file is not recognized.
+    #
+    # If instantiate=true (the default), then
+    # return the instantiated workflow processor, otherwise
+    # return the identified subclass.
+    def self.for_file(file, instantiate=true)
+      impl = implementations.select { |cl|
+        begin
+          cl.recognized?(file)
+        ensure
+          file.rewind
+        end
+      }.first
+      if ! impl.nil? && instantiate
+        impl.new file
+      else
+        impl
+      end
+    end
+
     # These:
     # - provide information about the Workflow Type supported by this processor,
     # - provide information about the processor's capabilites, and
@@ -70,10 +92,6 @@ module WorkflowParser
       ""
     end
 
-    def self.display_data_format
-      ""
-    end
-
     def self.mime_type
       "application/octet-stream"
     end
@@ -81,47 +99,15 @@ module WorkflowParser
     # All the file extensions supported by this workflow processor.
     # Must be all in lowercase.
     def self.file_extensions_supported
-      if self.default_file_extension.nil?
-        []
-      else
-        [self.default_file_extension]
-      end
+      []
     end
 
     def self.default_file_extension
-      nil
-    end
-
-    def self.can_determine_type_from_file?
-      false
+      self.file_extensions_supported.first
     end
 
     def self.recognised?(file)
       false
-    end
-
-    def self.can_infer_metadata?
-      false
-    end
-
-    def self.can_infer_title?
-      false
-    end
-
-    def self.can_infer_description?
-      false
-    end
-
-    def self.can_generate_preview_image?
-      false
-    end
-
-    def self.can_generate_preview_svg?
-      false
-    end
-
-    def self.show_download_section?
-      true
     end
 
     # End Class Methods
