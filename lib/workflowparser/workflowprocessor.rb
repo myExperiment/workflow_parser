@@ -13,7 +13,11 @@ module WorkflowParser
       $subclasses << subclass
     end
 
-    # Find first WorkflowProcessor subclass where
+    def self.implementations
+      $subclasses
+    end
+
+    # Find first WorkflowProcessor implementation subclass where
     # all the key/value pairs in the filter
     # match the result of calling the corresponding
     # class functions.
@@ -32,7 +36,7 @@ module WorkflowParser
       # Select first of the subclasses
       # where calling cl.key() matches
       # every corresponding value in the filter
-      $subclasses.select {|cl|
+      implementations.select {|cl|
         filter.values == filter.keys.map { |key|
           cl.send(key) }
       }.first
@@ -59,7 +63,11 @@ module WorkflowParser
     # All the file extensions supported by this workflow processor.
     # Must be all in lowercase.
     def self.file_extensions_supported
-      []
+      if self.default_file_extension.nil?
+        []
+      else
+        [self.default_file_extension]
+      end
     end
 
     def self.default_file_extension

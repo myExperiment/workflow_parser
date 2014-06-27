@@ -10,7 +10,7 @@ module Example
       "fred"
     end
   end
-  class Soup < WorkflowParser::WorkflowProcessor
+  class Soup < Fred
     def self.mime_type
       "application/x-soup"
     end
@@ -29,6 +29,8 @@ class WorkflowProcessorTest < MiniTest::Test
        WorkflowParser::WorkflowProcessor.for(:mime_type => "application/x-fred",
                                              :default_file_extension => "fred")
      assert_equal Example::Fred,
+       WorkflowParser::WorkflowProcessor.for(:file_extensions_supported => ["fred"])
+     assert_equal Example::Fred,
        WorkflowParser::WorkflowProcessor.for(:mime_type => "application/x-fred",
                                              :default_file_extension => "fred")
      assert_nil WorkflowParser::WorkflowProcessor.for(:mime_type => "application/x-fred",
@@ -37,5 +39,7 @@ class WorkflowProcessorTest < MiniTest::Test
        WorkflowParser::WorkflowProcessor.for(:mime_type => "application/x-soup")
      assert_nil WorkflowParser::WorkflowProcessor.for(:mime_type => "application/x-unknown")
   end
+
+
 
 end
