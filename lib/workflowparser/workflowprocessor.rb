@@ -30,20 +30,27 @@ module WorkflowParser
     # a symbol, then matching is instead done with .include?
     # on the returned collection.
     #
-    # Example:
+    # Example, if:
     #
     #     class Fred << WorkflowProcessor
     #         def self.mime_type
     #            "fred"
     #         end
+    #         def self.file_extensions_supported
+    #             ["xml", "zip"]
+    #         end
     #     end
-    #     WorkflowProcessor.for(:mime_type => "fred")
     #
-    # will return Fred
+    # Then:
+    #
+    #     WorkflowProcessor.for(:mime_type => "fred")
+    #     WorkflowProcessor.for([:file_extensions_supported] => "zip")
+    #
+    # will both return Fred
     def self.for(filter={})
       implementations.select { |cl|
         filter.all? do |key,expected|
-          if key.respond_to? :first 
+          if key.respond_to? :first
             value = cl.send(key.first)
             value.respond_to?(:include?) && value.include?(expected)
           else
