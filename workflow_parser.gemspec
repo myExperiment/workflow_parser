@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'workflowparser/version'
+require 'workflow_parser/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "workflowparser"
+  spec.name          = "workflow_parser"
   spec.version       = WorkflowParser::VERSION
   spec.authors       = ["Stian Soiland-Reyes"]
   spec.email         = ["support@mygrid.org.uk"]
   spec.summary       = %q{API for parsing various workflow formats}
 #  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = "https://github.com/myExperiment/workflow-parser"
+  spec.homepage      = "https://github.com/myExperiment/workflow_parser"
   spec.license       = "BSD-3-Clause"
 
   spec.files         = `git ls-files -z`.split("\x0")
