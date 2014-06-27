@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require 'workflowparser/workflowprocessor'
+require 'workflow_parser/workflow_processor'
 require 'stringio'
 
 module Example
