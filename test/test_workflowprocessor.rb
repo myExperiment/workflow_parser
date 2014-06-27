@@ -14,6 +14,9 @@ module Example
     def self.mime_type
       "application/x-soup"
     end
+    def self.file_extensions_supported
+      ["other", "soup", "more"]
+    end
   end
 end
 
@@ -37,6 +40,8 @@ class WorkflowProcessorTest < MiniTest::Test
                                                       :default_file_extension => "unknown")
      assert_equal Example::Soup,
        WorkflowParser::WorkflowProcessor.for(:mime_type => "application/x-soup")
+     assert_equal Example::Soup,
+         WorkflowParser::WorkflowProcessor.for([:file_extensions_supported] => "soup")
      assert_nil WorkflowParser::WorkflowProcessor.for(:mime_type => "application/x-unknown")
   end
 

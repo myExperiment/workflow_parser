@@ -22,6 +22,14 @@ module WorkflowParser
     # match the result of calling the corresponding
     # class functions.
     #
+    # If the key is a symbol or string, then the
+    # matching is done by calling the class function
+    # with that name and comparing the result with ==.
+    #
+    # If the key is a list containing a string or
+    # a symbol, then matching is instead done with .include?
+    # on the returned collection.
+    #
     # Example:
     #
     #     class Fred << WorkflowProcessor
@@ -33,12 +41,15 @@ module WorkflowParser
     #
     # will return Fred
     def self.for(filter={})
-      # Select first of the subclasses
-      # where calling cl.key() matches
-      # every corresponding value in the filter
-      implementations.select {|cl|
-        filter.values == filter.keys.map { |key|
-          cl.send(key) }
+      implementations.select { |cl|
+        filter.all? do |key,expected|
+          if key.respond_to? :first 
+            value = cl.send(key.first)
+            value.respond_to?(:include?) && value.include?(expected)
+          else
+            expected == cl.send(key)
+          end
+        end
       }.first
     end
 
